@@ -3,50 +3,145 @@ using ApiEntregasMentoria.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ApiEntregasMentoria.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
-        IUserService _UserService;
+        private readonly IUserService _userService;
+
         public UserController(IUserService userService)
         {
-            _UserService = userService;
+            _userService = userService;
         }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<UserDto>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _UserService.GetAllUser();
+            try
+            {
+                var users = await _userService.GetAllUser();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Status = 500,
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles ="Manager")]
-        public async Task<UserDto> Get(int id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Get(int id)
         {
-            return await _UserService.GetUser(id);
+            try
+            {
+                var user = await _userService.GetUser(id);
+
+                if (user == null)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Status = 404,
+                        Message = $"Usuário com ID {id} não foi encontrado"
+                    });
+                }
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Status = 500,
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task Post([FromBody] UserDto user)
+        public async Task<IActionResult> Post([FromBody] UserDto user)
         {
-            await _UserService.AddUser(user);
+            try
+            {
+                await _userService.AddUser(user);
+                return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Status = 500,
+                    Message = ex.Message
+                });
+            }
         }
 
-        [HttpPut("")]
-        public async Task Put([FromBody] UserDto user)
+        [HttpPut]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Put([FromBody] UserDto user)
         {
-            await _UserService.UpdateUser(user);
+            try
+            {
+                var existingUser = await _userService.GetUser(user.Id);
+
+                if (existingUser == null)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Status = 404,
+                        Message = $"Usuário com ID {user.Id} não encontrado"
+                    });
+                }
+
+                await _userService.UpdateUser(user);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Status = 500,
+                    Message = ex.Message
+                });
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Delete(int id)
         {
-            await _UserService.DeleteUser(id);
+            try
+            {
+                var user = await _userService.GetUser(id);
+
+                if (user == null)
+                {
+                    return NotFound(new ErrorResponse
+                    {
+                        Status = 404,
+                        Message = $"Usuário com ID {id} não encontrado"
+                    });
+                }
+
+                await _userService.DeleteUser(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Status = 500,
+                    Message = ex.Message
+                });
+            }
         }
     }
 }

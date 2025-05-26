@@ -10,6 +10,7 @@ C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\AutoMa
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Humanizer.dll
+C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.Build.Locator.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
@@ -46,6 +47,8 @@ C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Micros
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Npgsql.dll
+C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -154,6 +157,7 @@ C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEnt
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.csproj.CoreCompileInputs.cache
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.sourcelink.json
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\staticwebassets\msbuild.ApiEntregasMentoria.Microsoft.AspNetCore.StaticWebAssets.props
@@ -168,6 +172,3 @@ C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\refint
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.pdb
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ApiEntregasMentoria.genruntimeconfig.cache
 C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\obj\Debug\net8.0\ref\ApiEntregasMentoria.dll
-C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Npgsql.dll
-C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-C:\Users\crist\Desktop\GordoMentoria\ApiEntregasMentoria\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

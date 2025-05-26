@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiEntregasMentoria")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a7309d51904a32c82fb5e603d33721b6fafd92eb")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiEntregasMentoria")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiEntregasMentoria")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

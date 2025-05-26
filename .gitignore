@@ -1,0 +1,75 @@
+## Build result
+bin/
+obj/
+
+## Rider project files
+.idea/
+
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## VS Code settings
+.vscode/
+
+## Visual Studio
+.vs/
+*.dbmdl
+*.bak
+*.log
+
+## ASP.NET Core
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+
+## dotCover
+*.dotCover
+
+## Logs
+*.log
+
+## Database
+*.mdf
+*.ldf
+*.ndf
+
+## OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Publish results
+publish/
+wwwroot/lib/
+
+## npm, Yarn
+node_modules/
+dist/
+
+## Coverage
+coverage/
+TestResults/
+*.coverage
+*.coveragexml
+
+## Others
+_ReSharper*/
+*.sln.cache
+*.tmp
+*.ide
+
+## Optional: ignore local Git hooks
+.git/hooks/

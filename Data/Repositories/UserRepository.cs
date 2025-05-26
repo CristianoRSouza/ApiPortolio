@@ -11,9 +11,9 @@ namespace ApiEntregasMentoria.Data.Repositories
         {
         }
 
-        public async Task<User> ValidateUser(string email, string password)
+        public async Task<User> GetByEmail(string email)
         {
-            var result = await _dbSet.Include(p => p.RolesToken).FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            var result = await _dbSet.Include(p => p.RolesToken).FirstOrDefaultAsync(u => u.Email == email);
 
             return result;
         }

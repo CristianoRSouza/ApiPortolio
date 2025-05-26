@@ -13,10 +13,10 @@ namespace ApiEntregasMentoria.Data.Repositories
             _meuContexto = myContext;
             _dbSet = _meuContexto.Set<Tentity>();
         }
-        public async Task Add(Tentity entidade)
+        public  Task Add(Tentity entidade)
         {
-            _dbSet.Add(entidade);   
-            await SaveChanges();
+            _dbSet.Add(entidade);
+            return Task.CompletedTask;
         }
 
         public async Task Delete(int Id)
@@ -25,7 +25,6 @@ namespace ApiEntregasMentoria.Data.Repositories
             if (entity != null)
             {
                 _dbSet.Remove(entity);
-                await SaveChanges();
             }
         }
 
@@ -48,15 +47,10 @@ namespace ApiEntregasMentoria.Data.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<int> SaveChanges()
-        {
-            return await _meuContexto.SaveChangesAsync();
-        }
-
-        public async Task Update(Tentity entidade)
+        public  Task Update(Tentity entidade)
         {
             _dbSet.Update(entidade);
-            await SaveChanges();
+            return Task.CompletedTask;
         }
     }
 }

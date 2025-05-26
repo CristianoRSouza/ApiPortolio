@@ -7,9 +7,5 @@
         Task Add(Tentity entidade);
         Task Delete(int Id);
         Task Update(Tentity entidade);
-        Task<int> SaveChanges();
-
-        
-
     }
 }

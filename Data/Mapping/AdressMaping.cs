@@ -9,28 +9,28 @@ namespace ApiEntregasMentoria.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<Adress> builder)
         {
-            //builder.Property(a => a.City)
-            //    .HasMaxLength(100)
-            //    .IsRequired();
-            //builder.Property(a => a.Neighborhood)
-            //    .HasMaxLength(100)
-            //    .IsRequired();
+            builder.Property(a => a.City)
+                .HasMaxLength(100)
+                .IsRequired();
+            builder.Property(a => a.Neighborhood)
+                .HasMaxLength(100)
+                .IsRequired();
 
-            //builder.Property(a => a.Street)
-            //    .HasMaxLength(200)
-            //    .IsRequired();
+            builder.Property(a => a.Street)
+                .HasMaxLength(200)
+                .IsRequired();
 
-            //builder.Property(a => a.PostalCode)
-            //    .HasMaxLength(20)
-            //    .IsRequired();
+            builder.Property(a => a.PostalCode)
+                .HasMaxLength(20)
+                .IsRequired();
 
-            //builder.Property(a => a.Country)
-            //    .HasMaxLength(100)
-            //    .IsRequired();
+            builder.Property(a => a.Country)
+                .HasMaxLength(100)
+                .IsRequired();
 
-            //builder.Property(a => a.Phone)
-            //    .HasMaxLength(15)
-            //    .IsRequired();
+            builder.Property(a => a.Phone)
+                .HasMaxLength(15)
+                .IsRequired();
 
         }
     }

@@ -1,54 +1,63 @@
-﻿using ApiEntregasMentoria.Controllers;
-using ApiEntregasMentoria.Data.Dto;
+﻿using ApiEntregasMentoria.Data.Dto;
 using ApiEntregasMentoria.Data.Entities;
-using ApiEntregasMentoria.Data.Repositories;
 using ApiEntregasMentoria.Interfaces.Repositories;
 using ApiEntregasMentoria.Interfaces.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApiEntregasMentoria.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepositoryUser _repositoryUser;
-        private readonly IMapper _Mapper;
-        public UserService(IRepositoryUser userRepository, IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public UserService( IMapper mapper, IUnitOfWork unitOfWork, IPasswordHasher<User> passwordHasher)
         {
-            _repositoryUser = userRepository;
-            _Mapper = mapper;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _passwordHasher = passwordHasher;
         }
         public async Task AddUser(UserDto user)
         {
-            await _repositoryUser.Add(_Mapper.Map<User>(user));
+            var userEntity = _mapper.Map<User>(user);
+            userEntity.PasswordHash = _passwordHasher.HashPassword(userEntity,user.Password);
+
+            userEntity.RolesToken = await _unitOfWork._RoleTokenRepository.GetByRoleNameAsync("Client");
+
+            await _unitOfWork._UserRepository.Add(userEntity);
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task DeleteUser(int id)
         {
-            await _repositoryUser.Delete(id);
+            await _unitOfWork._UserRepository.Delete(id);
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUser()
         {
-            return _Mapper.Map<IEnumerable<UserDto>>(await _repositoryUser.GetAll());
+            return _mapper.Map<IEnumerable<UserDto>>(await _unitOfWork._UserRepository.GetAll());
         }
 
         public async Task<UserDto> GetUser(int id)
         {
-            return _Mapper.Map<UserDto>(await _repositoryUser.Get(id));
+            return _mapper.Map<UserDto>(await _unitOfWork._UserRepository.Get(id));
         }
 
         public async Task UpdateUser(UserDto user)
         {
-            var existingUser = await _repositoryUser.Get(user.Id);
+            var existingUser = await _unitOfWork._UserRepository.Get(user.Id);
             if (existingUser == null)
             {
                 throw new KeyNotFoundException($"Usuário com ID {user.Id} não foi encontrado.");
             }
 
-            _Mapper.Map(user, existingUser);
+            _mapper.Map(user, existingUser);
 
 
-            await _repositoryUser.Update(_Mapper.Map<User>(existingUser));
+            await _unitOfWork._UserRepository.Update(_mapper.Map<User>(existingUser));
+            await _unitOfWork.CommitAsync();
         }
     }
 }
