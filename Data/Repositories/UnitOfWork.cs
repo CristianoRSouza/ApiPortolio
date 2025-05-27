@@ -6,15 +6,20 @@ namespace ApiEntregasMentoria.Data.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public IRepositoryUser _UserRepository {  get;}
-        public IRepositoryRoleToken _RoleTokenRepository {  get;}
         public MyContext _myContext { get; set; }
         private IDbContextTransaction? _transaction;
+        public IRepositoryUser _UserRepository {  get;}
+        public IRepositoryRoleToken _RoleTokenRepository {  get;}
+        public IRepositoryMatch _MatchRepository {  get;}
+        public IRepositoryTeam _TeamRepository {  get;}
 
-        public UnitOfWork(MyContext myContext, IRepositoryUser userRepository, IRepositoryRoleToken repositoryRoleToken)
+        public UnitOfWork(MyContext myContext, IRepositoryUser userRepository, IRepositoryRoleToken repositoryRoleToken,
+            IRepositoryMatch matchRepository, IRepositoryTeam repositoryTeam)
         {
             _UserRepository = userRepository;
             _RoleTokenRepository = repositoryRoleToken;
+            _MatchRepository = matchRepository;
+            _TeamRepository = repositoryTeam;
             _myContext = myContext;
         }
 

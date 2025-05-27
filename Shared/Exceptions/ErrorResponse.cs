@@ -1,4 +1,4 @@
-﻿namespace ApiEntregasMentoria.Data.Dto
+﻿namespace ApiEntregasMentoria.Shared.Exceptions
 {
     public class ErrorResponse
     {

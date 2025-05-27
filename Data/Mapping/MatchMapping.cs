@@ -25,10 +25,10 @@ namespace ApiEntregasMentoria.Data.Mapping
                    .HasForeignKey(m => m.AwayTeamId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(m => m.BetItems)
-                   .WithOne(bi => bi.Match)
-                   .HasForeignKey(bi => bi.MatchId);
-
+            builder.HasOne(m => m.MatchStats)
+                   .WithOne(ms => ms.Match)
+                   .HasForeignKey<MatchStats>(ms => ms.MatchId)
+                  .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

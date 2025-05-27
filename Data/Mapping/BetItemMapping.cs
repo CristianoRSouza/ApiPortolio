@@ -9,36 +9,35 @@ namespace ApiEntregasMentoria.Data.Mapping
         public void Configure(EntityTypeBuilder<BetItem> builder)
         {
             builder.ToTable("BetItems");
-            builder.HasKey(bi => bi.Id);
+            builder.HasKey(b => b.Id);
 
-            builder.Property(bi => bi.Amount)
-                   .HasColumnType("decimal(10,2)")
-                   .IsRequired();
+            builder.Property(b => b.Amount)
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
 
-            builder.Property(bi => bi.BetType)
-                   .HasMaxLength(50)
-                   .IsRequired();
+            builder.Property(b => b.BetType)
+                .IsRequired();
 
-            builder.Property(bi => bi.Result)
-                   .HasMaxLength(50);
+            builder.Property(b => b.Result)
+                .IsRequired(false);
 
-            builder.Property(bi => bi.BetDate)
-                   .IsRequired();
+            builder.Property(b => b.BetDate)
+                .IsRequired();
 
-            builder.HasOne(bi => bi.User)
-                   .WithMany(u => u.BetItems)
-                   .HasForeignKey(bi => bi.UserId)
-                   .OnDelete(DeleteBehavior.Restrict); // Evita ciclo
+            builder.HasOne(b => b.User)
+                .WithMany(u => u.BetItems)
+                .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(bi => bi.Match)
-                   .WithMany(m => m.BetItems)
-                   .HasForeignKey(bi => bi.MatchId)
-                   .OnDelete(DeleteBehavior.Restrict); // Também é bom evitar cascata aqui
+            builder.HasOne(b => b.Bet)
+                .WithMany(b => b.Items)
+                .HasForeignKey(b => b.BetId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(bi => bi.Bet)
-                   .WithMany(b => b.Items)
-                   .HasForeignKey(bi => bi.BetId)
-                   .OnDelete(DeleteBehavior.Cascade); // Permitido aqui
+            builder.HasOne(b => b.Market)
+                .WithMany(m => m.BetItems)
+                .HasForeignKey(b => b.MarketId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -11,9 +11,13 @@
         public Team AwayTeam { get; set; }
 
         public DateTime MatchDateTime { get; set; }
+
         public int HomeGoals { get; set; }
         public int AwayGoals { get; set; }
 
-        public ICollection<BetItem> BetItems { get; set; } = new List<BetItem>();
+        public ICollection<Market> Markets { get; set; } = new List<Market>();
+
+        public MatchStats MatchStats { get; set; }
     }
+
 }

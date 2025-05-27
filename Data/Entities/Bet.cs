@@ -8,5 +8,5 @@ public class Bet
     public int UserId { get; set; }
     public User User { get; set; }
 
-    public ICollection<BetItem> Items { get; set; }
+    public ICollection<BetItem> Items { get; set; } = new List<BetItem>();
 }

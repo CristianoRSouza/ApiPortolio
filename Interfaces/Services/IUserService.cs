@@ -10,4 +10,5 @@ namespace ApiEntregasMentoria.Interfaces.Services
         Task<IEnumerable<UserDto>> GetAllUser();
         Task DeleteUser(int id);
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using ApiEntregasMentoria.Data.Dto;
 using ApiEntregasMentoria.Interfaces.Services;
+using ApiEntregasMentoria.Shared.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiEntregasMentoria.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20250525231706_first")]
+    [Migration("20250527165103_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -68,6 +68,28 @@ namespace ApiEntregasMentoria.Migrations
                     b.ToTable("Adress");
                 });
 
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Market", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MatchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameEnum")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("Markets", (string)null);
+                });
+
             modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Match", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +120,47 @@ namespace ApiEntregasMentoria.Migrations
                     b.HasIndex("HomeTeamId");
 
                     b.ToTable("Matches", (string)null);
+                });
+
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.MatchStats", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Corners")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Fouls")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MatchId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Offsides")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RedCards")
+                        .HasColumnType("int");
+
+                    b.Property<int>("YellowCards")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchId")
+                        .IsUnique();
+
+                    b.HasIndex("MatchId1")
+                        .IsUnique()
+                        .HasFilter("[MatchId1] IS NOT NULL");
+
+                    b.ToTable("MatchStats", (string)null);
                 });
 
             modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.RolesToken", b =>
@@ -233,7 +296,7 @@ namespace ApiEntregasMentoria.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("BetDate")
                         .HasColumnType("datetime2");
@@ -241,17 +304,14 @@ namespace ApiEntregasMentoria.Migrations
                     b.Property<int>("BetId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BetType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("MatchId")
+                    b.Property<int>("BetType")
                         .HasColumnType("int");
 
-                    b.Property<string>("Result")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("MarketId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Result")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -260,11 +320,22 @@ namespace ApiEntregasMentoria.Migrations
 
                     b.HasIndex("BetId");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("MarketId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("BetItems", (string)null);
+                });
+
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Market", b =>
+                {
+                    b.HasOne("ApiEntregasMentoria.Data.Entities.Match", "Match")
+                        .WithMany("Markets")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
                 });
 
             modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Match", b =>
@@ -284,6 +355,21 @@ namespace ApiEntregasMentoria.Migrations
                     b.Navigation("AwayTeam");
 
                     b.Navigation("HomeTeam");
+                });
+
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.MatchStats", b =>
+                {
+                    b.HasOne("ApiEntregasMentoria.Data.Entities.Match", "Match")
+                        .WithOne()
+                        .HasForeignKey("ApiEntregasMentoria.Data.Entities.MatchStats", "MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiEntregasMentoria.Data.Entities.Match", null)
+                        .WithOne("MatchStats")
+                        .HasForeignKey("ApiEntregasMentoria.Data.Entities.MatchStats", "MatchId1");
+
+                    b.Navigation("Match");
                 });
 
             modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.User", b =>
@@ -306,7 +392,7 @@ namespace ApiEntregasMentoria.Migrations
                     b.HasOne("ApiEntregasMentoria.Data.Entities.User", "User")
                         .WithMany("Bets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -320,10 +406,10 @@ namespace ApiEntregasMentoria.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiEntregasMentoria.Data.Entities.Match", "Match")
+                    b.HasOne("ApiEntregasMentoria.Data.Entities.Market", "Market")
                         .WithMany("BetItems")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("MarketId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiEntregasMentoria.Data.Entities.User", "User")
@@ -334,7 +420,7 @@ namespace ApiEntregasMentoria.Migrations
 
                     b.Navigation("Bet");
 
-                    b.Navigation("Match");
+                    b.Navigation("Market");
 
                     b.Navigation("User");
                 });
@@ -344,9 +430,17 @@ namespace ApiEntregasMentoria.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Match", b =>
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Market", b =>
                 {
                     b.Navigation("BetItems");
+                });
+
+            modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.Match", b =>
+                {
+                    b.Navigation("Markets");
+
+                    b.Navigation("MatchStats")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApiEntregasMentoria.Data.Entities.RolesToken", b =>

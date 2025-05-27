@@ -16,6 +16,8 @@ namespace ApiEntregasMentoria.Data.ContextEntity
         public DbSet<Bet> Bets { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<BetItem> BetItems { get; set; }
+        public DbSet<Market> Markets { get; set; }
+        public DbSet<MatchStats> MatchStats { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MyContext).Assembly);

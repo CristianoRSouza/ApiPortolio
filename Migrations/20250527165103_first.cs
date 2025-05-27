@@ -134,7 +134,57 @@ namespace ApiEntregasMentoria.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Markets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameEnum = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MatchId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Markets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Markets_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MatchStats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MatchId = table.Column<int>(type: "int", nullable: false),
+                    Corners = table.Column<int>(type: "int", nullable: false),
+                    Fouls = table.Column<int>(type: "int", nullable: false),
+                    YellowCards = table.Column<int>(type: "int", nullable: false),
+                    RedCards = table.Column<int>(type: "int", nullable: false),
+                    Offsides = table.Column<int>(type: "int", nullable: false),
+                    MatchId1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MatchStats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MatchStats_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MatchStats_Matches_MatchId1",
+                        column: x => x.MatchId1,
+                        principalTable: "Matches",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -143,13 +193,13 @@ namespace ApiEntregasMentoria.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    BetType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Result = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    BetType = table.Column<int>(type: "int", nullable: false),
+                    Result = table.Column<int>(type: "int", nullable: true),
                     BetDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    BetId = table.Column<int>(type: "int", nullable: false)
+                    BetId = table.Column<int>(type: "int", nullable: false),
+                    MarketId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,11 +211,11 @@ namespace ApiEntregasMentoria.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BetItems_Matches_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "Matches",
+                        name: "FK_BetItems_Markets_MarketId",
+                        column: x => x.MarketId,
+                        principalTable: "Markets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BetItems_Users_UserId",
                         column: x => x.UserId,
@@ -190,9 +240,9 @@ namespace ApiEntregasMentoria.Migrations
                 column: "BetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BetItems_MatchId",
+                name: "IX_BetItems_MarketId",
                 table: "BetItems",
-                column: "MatchId");
+                column: "MarketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BetItems_UserId",
@@ -205,6 +255,11 @@ namespace ApiEntregasMentoria.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Markets_MatchId",
+                table: "Markets",
+                column: "MatchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Matches_AwayTeamId",
                 table: "Matches",
                 column: "AwayTeamId");
@@ -213,6 +268,19 @@ namespace ApiEntregasMentoria.Migrations
                 name: "IX_Matches_HomeTeamId",
                 table: "Matches",
                 column: "HomeTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchStats_MatchId",
+                table: "MatchStats",
+                column: "MatchId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchStats_MatchId1",
+                table: "MatchStats",
+                column: "MatchId1",
+                unique: true,
+                filter: "[MatchId1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AdressId",
@@ -232,22 +300,28 @@ namespace ApiEntregasMentoria.Migrations
                 name: "BetItems");
 
             migrationBuilder.DropTable(
+                name: "MatchStats");
+
+            migrationBuilder.DropTable(
                 name: "Bets");
 
             migrationBuilder.DropTable(
-                name: "Matches");
+                name: "Markets");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Teams");
+                name: "Matches");
 
             migrationBuilder.DropTable(
                 name: "Adress");
 
             migrationBuilder.DropTable(
                 name: "RolesToken");
+
+            migrationBuilder.DropTable(
+                name: "Teams");
         }
     }
 }

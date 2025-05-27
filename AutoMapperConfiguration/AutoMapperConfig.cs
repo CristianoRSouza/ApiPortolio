@@ -9,7 +9,9 @@ namespace ApiEntregasMentoria.AutoMapperConfiguration
         public AutoMapperConfig()
         {
             CreateMap<UserDto, User>().ReverseMap();
-            //CreateMap<IEnumerable<UserDto>, IEnumerable<User>>().ReverseMap();
+            CreateMap<Match, MatchCreateDto>().ReverseMap();
+            CreateMap<Match, MatchDto>().ReverseMap();
+            CreateMap<Match, MatchUpdateDto>().ReverseMap();
         }
     }
 }

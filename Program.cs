@@ -59,9 +59,12 @@ namespace ApiEntregasMentoria
             builder.Configuration.AddEnvironmentVariables();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IMatchService, MatchService>();
             builder.Services.AddScoped<IRepositoryUser, UserRepository>();
+            builder.Services.AddScoped<IRepositoryTeam, TeamRepository>();
             builder.Services.AddScoped<IRepositoryRoleToken, RoleTokenRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IRepositoryMatch, MatchRepository>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddDbContext<MyContext>(options =>
