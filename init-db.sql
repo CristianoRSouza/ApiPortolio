@@ -1,132 +1,49 @@
 -- Criar tabelas do banco de dados
-CREATE TABLE IF NOT EXISTS "Adresses" (
+CREATE TABLE IF NOT EXISTS "Roles" (
     "Id" SERIAL PRIMARY KEY,
-    "City" TEXT NOT NULL,
-    "Neighborhood" TEXT NOT NULL,
-    "Street" TEXT NOT NULL,
-    "PostalCode" TEXT NOT NULL,
-    "Country" TEXT NOT NULL,
-    "Phone" TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "Championships" (
-    "Id" SERIAL PRIMARY KEY,
-    "Name" TEXT NOT NULL,
-    "Country" TEXT NOT NULL,
-    "Logo" TEXT,
-    "IsActive" BOOLEAN NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "Teams" (
-    "Id" SERIAL PRIMARY KEY,
-    "Name" TEXT NOT NULL,
-    "Logo" TEXT,
-    "Country" TEXT NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL
+    "Name" VARCHAR(50) NOT NULL,
+    "Description" VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS "Users" (
     "Id" SERIAL PRIMARY KEY,
-    "Email" TEXT NOT NULL,
-    "Nickname" TEXT NOT NULL,
-    "FullName" TEXT,
-    "Phone" TEXT,
-    "Cpf" TEXT,
-    "PasswordHash" TEXT NOT NULL,
-    "Balance" NUMERIC NOT NULL,
-    "IsVerified" BOOLEAN NOT NULL,
-    "IsActive" BOOLEAN NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL,
-    "LastLogin" TIMESTAMPTZ,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL,
-    "AdressId" INTEGER REFERENCES "Adresses"("Id")
+    "Email" VARCHAR(255) NOT NULL UNIQUE,
+    "Nickname" VARCHAR(255) NOT NULL,
+    "FullName" VARCHAR(100),
+    "PasswordHash" VARCHAR(255) NOT NULL,
+    "Phone" VARCHAR(20),
+    "Cpf" VARCHAR(14),
+    "DateOfBirth" DATE,
+    "Balance" DECIMAL(10,2) DEFAULT 0.00,
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    "UpdatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS "Matches" (
+CREATE TABLE IF NOT EXISTS "UserRoles" (
     "Id" SERIAL PRIMARY KEY,
-    "Team1Id" INTEGER NOT NULL REFERENCES "Teams"("Id"),
-    "Team2Id" INTEGER NOT NULL REFERENCES "Teams"("Id"),
-    "ChampionshipId" INTEGER NOT NULL REFERENCES "Championships"("Id"),
-    "MatchDate" TIMESTAMPTZ NOT NULL,
-    "Status" TEXT NOT NULL,
-    "Team1Score" INTEGER,
-    "Team2Score" INTEGER,
-    "Team1Odd" NUMERIC NOT NULL,
-    "DrawOdd" NUMERIC NOT NULL,
-    "Team2Odd" NUMERIC NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL
+    "UserId" INTEGER NOT NULL REFERENCES "Users"("Id") ON DELETE CASCADE,
+    "RoleId" INTEGER NOT NULL REFERENCES "Roles"("Id") ON DELETE CASCADE,
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS "Notifications" (
-    "Id" SERIAL PRIMARY KEY,
-    "UserId" INTEGER NOT NULL REFERENCES "Users"("Id"),
-    "Type" TEXT NOT NULL,
-    "Title" TEXT NOT NULL,
-    "Message" TEXT NOT NULL,
-    "IsRead" BOOLEAN NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL
-);
+-- Inserir dados de teste
+INSERT INTO "Roles" ("Name", "Description") VALUES 
+('Admin', 'Administrador do sistema'),
+('User', 'Usuário comum'),
+('Manager', 'Gerente')
+ON CONFLICT DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS "Transactions" (
-    "Id" SERIAL PRIMARY KEY,
-    "UserId" INTEGER NOT NULL REFERENCES "Users"("Id"),
-    "Type" TEXT NOT NULL,
-    "Amount" NUMERIC NOT NULL,
-    "Status" TEXT NOT NULL,
-    "Description" TEXT,
-    "PixKey" TEXT,
-    "QrCode" TEXT,
-    "ExpiresAt" TIMESTAMPTZ,
-    "CreatedAt" TIMESTAMPTZ NOT NULL,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL
-);
+-- Inserir usuário de teste (senha: password)
+INSERT INTO "Users" ("Email", "Nickname", "FullName", "PasswordHash", "Balance") VALUES 
+('admin@soccerbet.com', 'admin', 'Administrador', '$2a$11$8K1p/a0dL2LkqvQDfuHoUOZShUy63TXz5B0qX5n2y4HvAQJbYdvTi', 1000.00),
+('user@test.com', 'testuser', 'Usuário Teste', '$2a$11$8K1p/a0dL2LkqvQDfuHoUOZShUy63TXz5B0qX5n2y4HvAQJbYdvTi', 500.00)
+ON CONFLICT DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS "Bets" (
-    "Id" SERIAL PRIMARY KEY,
-    "TicketId" TEXT NOT NULL,
-    "UserId" INTEGER NOT NULL REFERENCES "Users"("Id"),
-    "MatchId" INTEGER NOT NULL REFERENCES "Matches"("Id"),
-    "BetType" TEXT NOT NULL,
-    "Selection" TEXT NOT NULL,
-    "BetAmount" NUMERIC NOT NULL,
-    "SelectedOdd" NUMERIC NOT NULL,
-    "ResultAmount" NUMERIC NOT NULL,
-    "Status" TEXT NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL
-);
+-- Associar usuários às roles
+INSERT INTO "UserRoles" ("UserId", "RoleId") VALUES 
+(1, 1), -- admin como Admin
+(1, 3), -- admin como Manager  
+(2, 2)  -- testuser como User
+ON CONFLICT DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS "MatchStats" (
-    "Id" SERIAL PRIMARY KEY,
-    "MatchId" INTEGER NOT NULL REFERENCES "Matches"("Id"),
-    "Corners" INTEGER NOT NULL,
-    "Fouls" INTEGER NOT NULL,
-    "YellowCards" INTEGER NOT NULL,
-    "RedCards" INTEGER NOT NULL,
-    "Offsides" INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "Odds" (
-    "Id" SERIAL PRIMARY KEY,
-    "MatchId" INTEGER NOT NULL REFERENCES "Matches"("Id"),
-    "BetType" TEXT NOT NULL,
-    "Selection" TEXT NOT NULL,
-    "Value" NUMERIC NOT NULL,
-    "IsActive" BOOLEAN NOT NULL,
-    "CreatedAt" TIMESTAMPTZ NOT NULL,
-    "UpdatedAt" TIMESTAMPTZ NOT NULL
-);
-
--- Criar índices
-CREATE INDEX IF NOT EXISTS "IX_Users_AdressId" ON "Users" ("AdressId");
-CREATE INDEX IF NOT EXISTS "IX_Matches_Team1Id" ON "Matches" ("Team1Id");
-CREATE INDEX IF NOT EXISTS "IX_Matches_Team2Id" ON "Matches" ("Team2Id");
-CREATE INDEX IF NOT EXISTS "IX_Matches_ChampionshipId" ON "Matches" ("ChampionshipId");
-CREATE INDEX IF NOT EXISTS "IX_Notifications_UserId" ON "Notifications" ("UserId");
-CREATE INDEX IF NOT EXISTS "IX_Transactions_UserId" ON "Transactions" ("UserId");
-CREATE INDEX IF NOT EXISTS "IX_Bets_UserId" ON "Bets" ("UserId");
-CREATE INDEX IF NOT EXISTS "IX_Bets_MatchId" ON "Bets" ("MatchId");
-CREATE INDEX IF NOT EXISTS "IX_MatchStats_MatchId" ON "MatchStats" ("MatchId");
-CREATE INDEX IF NOT EXISTS "IX_Odds_MatchId" ON "Odds" ("MatchId");
+PRINT 'Banco de dados inicializado com sucesso!';
