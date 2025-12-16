@@ -1,0 +1,6 @@
+@ApiEntregasMentoria_HostAddress = http://localhost:5196
+
+GET {{ApiEntregasMentoria_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
