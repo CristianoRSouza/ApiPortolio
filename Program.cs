@@ -164,6 +164,14 @@ else
 }
 
             var app = builder.Build();
+
+// Criar tabelas automaticamente
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MyContext>();
+    context.Database.EnsureCreated();
+    Console.WriteLine("✅ Database tables created/verified");
+}
 app.UseSwagger();
 app.UseSwaggerUI();
 
