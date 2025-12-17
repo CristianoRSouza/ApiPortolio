@@ -7,21 +7,11 @@ WORKDIR /src
 COPY ["ApiEntregasMentoria.csproj", "."]
 RUN dotnet restore "ApiEntregasMentoria.csproj"
 COPY . .
-RUN dotnet build "ApiEntregasMentoria.csproj" -c Release -o /app/build
-
-FROM build AS publish
 RUN dotnet publish "ApiEntregasMentoria.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
-# Instalar PostgreSQL client para executar scripts
-RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
-
-# Copiar script de inicialização
-COPY init-db.sql .
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-
-ENTRYPOINT ["./entrypoint.sh"]
+ENV ASPNETCORE_URLS=http://+:8080
+ENTRYPOINT ["dotnet", "ApiEntregasMentoria.dll"]
