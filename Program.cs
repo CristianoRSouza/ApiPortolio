@@ -152,18 +152,20 @@ namespace ApiEntregasMentoria
 
 
 // Configurar porta para Railway
-builder.WebHost.UseUrls("http://*:8080");
+// Configurar porta
+if (Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT") != null)
+{
+    builder.WebHost.UseUrls("http://*:8080");
+}
+else
+{
+    // Desenvolvimento local
+    builder.WebHost.UseUrls("https://localhost:7207", "http://localhost:5000");
+}
 
             var app = builder.Build();
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-
-// Health check para Railway
-app.MapGet("/health", () => "OK");
-
-            }
+app.UseSwagger();
+app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
             app.UseCors("AllowReactNative");
