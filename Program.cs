@@ -150,11 +150,19 @@ namespace ApiEntregasMentoria
             //    };
             //});
 
+
+// Configurar porta para Railway
+builder.WebHost.UseUrls("http://*:8080");
+
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+// Health check para Railway
+app.MapGet("/health", () => "OK");
+
             }
 
             app.UseHttpsRedirection();

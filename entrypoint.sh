@@ -1,31 +1,26 @@
 #!/bin/bash
 set -e
 
-echo "🔵 Waiting for database to be ready..."
+echo "🚀 Iniciando aplicação SoccerBet..."
 
-# Extract database connection info from DATABASE_URL
-DB_HOST=$(echo $DATABASE_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-DB_PORT=$(echo $DATABASE_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
-DB_USER=$(echo $DATABASE_URL | sed -n 's/.*\/\/\([^:]*\):.*/\1/p')
-
-echo "🔍 Connecting to: $DB_HOST:$DB_PORT as $DB_USER"
-
-# Wait for database to be ready
-until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do
-  echo "⏳ Database is unavailable - sleeping"
+# Aguardar PostgreSQL estar disponível
+echo "⏳ Aguardando PostgreSQL..."
+until pg_isready -h $(echo $DATABASE_URL | cut -d'@' -f2 | cut -d'/' -f1) -p 5432; do
+  echo "PostgreSQL não está pronto - aguardando..."
   sleep 2
 done
 
-echo "✅ Database is ready!"
+echo "✅ PostgreSQL está pronto!"
 
-# Execute SQL script to create tables
-if [ -f "/app/init-db.sql" ]; then
-    echo "🔧 Creating database tables..."
-    psql $DATABASE_URL -f /app/init-db.sql
-    echo "✅ Tables created successfully!"
-else
-    echo "⚠️ No init-db.sql found, skipping table creation"
-fi
+# Extrair dados da DATABASE_URL para executar script SQL
+DB_HOST=$(echo $DATABASE_URL | sed 's/.*@\([^:]*\):.*/\1/')
+DB_PORT=$(echo $DATABASE_URL | sed 's/.*:\([0-9]*\)\/.*/\1/')
+DB_NAME=$(echo $DATABASE_URL | sed 's/.*\/\([^?]*\).*/\1/')
+DB_USER=$(echo $DATABASE_URL | sed 's/.*\/\/\([^:]*\):.*/\1/')
+DB_PASS=$(echo $DATABASE_URL | sed 's/.*:\/\/[^:]*:\([^@]*\)@.*/\1/')
 
-echo "🚀 Starting SoccerBet API..."
+echo "🗄️ Executando script de inicialização do banco..."
+PGPASSWORD=$DB_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f init-db.sql || echo "⚠️ Script já executado ou erro (continuando...)"
+
+echo "🎯 Iniciando aplicação .NET..."
 exec dotnet ApiEntregasMentoria.dll
