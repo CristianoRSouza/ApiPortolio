@@ -173,6 +173,11 @@ app.UseSwaggerUI();
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+// Endpoints simples para teste
+app.MapGet("/", () => "SoccerBet API está funcionando!");
+app.MapGet("/health", () => "OK");
+
             app.MapControllers();
 
             app.Run();
