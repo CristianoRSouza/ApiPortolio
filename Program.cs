@@ -178,6 +178,14 @@ app.UseSwaggerUI();
 app.MapGet("/", () => "SoccerBet API está funcionando!");
 app.MapGet("/health", () => "OK");
 
+app.MapPost("/api/test/login", (LoginRequest req) => {
+    if (req.Email == "test@test.com" && req.Password == "123")
+        return Results.Ok(new { token = "fake-jwt-token", message = "Login successful" });
+    return Results.BadRequest(new { message = "Invalid credentials" });
+});
+
+record LoginRequest(string Email, string Password);
+
             app.MapControllers();
 
             app.Run();
