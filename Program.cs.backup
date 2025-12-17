@@ -81,7 +81,7 @@ namespace ApiEntregasMentoria
             {
                 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
                                      builder.Configuration.GetConnectionString("DefaultConnection") ??
-                                     "Host=localhost;Database=soccerbet;Username=postgres;Password=123456;Port=5432;Timeout=30;CommandTimeout=30;Pooling=true;MinPoolSize=1;MaxPoolSize=10;ConnectionIdleLifetime=300;KeepAlive=30";
+                                     "Host=localhost;Database=soccerbet;Username=soccerbet_user;Password=soccerbet_pass123";
                 
                 Console.WriteLine($"🔍 Using connection: {connectionString?.Substring(0, Math.Min(50, connectionString?.Length ?? 0))}...");
                 options.UseNpgsql(connectionString);
