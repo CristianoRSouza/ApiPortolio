@@ -47,7 +47,7 @@ namespace ApiEntregasMentoria.Configuration
             services.AddDbContext<MyContext>(options =>
             {
                 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ??
-                                     configuration.GetConnectionString("DbLocal");
+                                     configuration.GetConnectionString("RailwayPrivate");
                 options.UseNpgsql(connectionString);
             });
 
