@@ -65,20 +65,20 @@ namespace ApiEntregasMentoria
             // Abrir Swagger no browser automaticamente
             if (app.Environment.IsDevelopment())
             {
-                var url = "http://localhost:8080";
+                var urls = app.Urls.FirstOrDefault() ?? "http://localhost:5196";
                 try
                 {
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = url,
+                        FileName = urls,
                         UseShellExecute = true
                     });
-                    Console.WriteLine($"🌐 Swagger aberto automaticamente: {url}");
+                    Console.WriteLine($"🌐 Swagger aberto automaticamente: {urls}");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Erro ao abrir browser: {ex.Message}");
-                    Console.WriteLine($"🔗 Acesse manualmente: {url}");
+                    Console.WriteLine($"🔗 Acesse manualmente: {urls}");
                 }
             }
             app.Run();
