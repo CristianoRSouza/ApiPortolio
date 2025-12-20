@@ -105,7 +105,11 @@ namespace ApiEntregasMentoria.Controllers
             await _context.SaveChangesAsync();
 
             // Assign default User role
-            await _roleService.AssignRoleToUserAsync(user.Id, 1, user.Id); // Role ID 1 = User
+            var roleAssigned = await _roleService.AssignRoleToUserAsync(user.Id, 1, user.Id); // Role ID 1 = User
+            if (!roleAssigned)
+            {
+                return BadRequest("Failed to assign default role. Please ensure the role exists.");
+            }
 
             var token = await GenerateJwtTokenAsync(user);
 

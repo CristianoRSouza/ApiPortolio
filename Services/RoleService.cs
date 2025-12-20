@@ -37,6 +37,11 @@ namespace ApiEntregasMentoria.Services
             if (existingUserRole != null)
                 return false;
 
+            // Validate role exists
+            var roleExists = await _context.Roles.AnyAsync(r => r.Id == roleId);
+            if (!roleExists)
+                return false;
+
             var userRole = new UserRole
             {
                 UserId = userId,

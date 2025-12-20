@@ -10,27 +10,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-
-  api:
-    build: .
-    container_name: soccerbet-api
-    environment:
-      - DATABASE_URL=Host=postgres;Database=soccerbet;Username=postgres;Password=123456;Port=5432
-      - JWT_SECRET_KEY=SoccerBetSecretKey123456789012345678901234567890123456789012345678901234567890
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080
-    ports:
-      - "8080:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
 
 volumes:
   postgres_data:
